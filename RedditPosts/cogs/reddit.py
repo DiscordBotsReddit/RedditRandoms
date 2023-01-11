@@ -17,9 +17,6 @@ class SubredditWatch(commands.Cog):
         self.MAX_SUBS = 25
         db = sqlite3.connect('watched_subs.db')
         cur = db.cursor()
-	cur.execute("CREATE TABLE IF NOT EXISTS WatchedSubs(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guild_id INTEGER NOT NULL, subreddit TEXT NOT NULL);")
-	cur.execute("CREATE TABLE IF NOT EXISTS SubChannel(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guild_id INTEGER NOT NULL UNIQUE, channel_id INTEGER NOT NULL UNIQUE, running INTEGER NOT NULL DEFAULT 0);")
-	db.commit()
         cur.execute("UPDATE SubChannel SET running=0 WHERE running=1;")
         db.commit()
         cur.close()
@@ -139,7 +136,7 @@ class SubredditWatch(commands.Cog):
                 db.close()
                 for sub in watched_subs:
                     subreddit = await reddit.subreddit(sub['subreddit'])
-                    async for submission in subreddit.stream.submissions():
+                    async for submission in subreddit.stream.submissions(pause_after=0):
                         db = sqlite3.connect('watched_subs.db')
                         db.row_factory = sqlite3.Row
                         cur = db.cursor()
@@ -152,23 +149,20 @@ class SubredditWatch(commands.Cog):
                                     created_at = datetime.fromtimestamp(int(submission.created_utc))
                                     submission.permalink = "https://www.reddit.com"+submission.permalink
                                     if len(submission.title) > 100: # Forum post titles can only be 100 characters or less
-                                        submission.title = submission.title[:95]+"..."
+                                        submission.title = submission.title[:97]+"..."
                                     if len(channel.threads) > 0:
                                         names = [channel.name for channel in channel.threads]
                                         if submission.title in names:
                                             pass
                                         else:
-                                            embed = discord.Embed(title=submission.title, url=submission.permalink, timestamp=created_at)
-                                            embed.set_image(url=submission.url)
-                                            await channel.create_thread(name=submission.title, embed=embed)
+                                            await channel.create_thread(name=submission.title, content=f'r/{submission.subreddit}\n{submission.url}')
                                             await sleep(5) # Discord rate limits
                                     else:
-                                        embed = discord.Embed(title=submission.title, url=submission.permalink, timestamp=created_at)
-                                        embed.set_image(url=submission.url)
-                                        await channel.create_thread(name=submission.title, embed=embed)
+                                        await channel.create_thread(name=submission.title, content=f'r/{submission.subreddit}\n{submission.url}')
                                         await sleep(5) # Discord rate limits
                         elif running['running'] == 0:
                             return
+        print('Done')
                             
     @app_commands.command(name='stop', description='Stops watching your set subreddits.')
     @app_commands.checks.has_permissions(manage_guild=True)
