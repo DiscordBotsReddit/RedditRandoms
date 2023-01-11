@@ -2,14 +2,13 @@
 
 import os
 from typing import Literal, Optional
-import sqlite3
 
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context, Greedy
 
 ##EDIT 
-USER_ID = os.getenv("DISCORD_ID") # Change with your own user ID - USER_ID = 123456
+USER_ID = int(os.getenv("DISCORD_USER_ID")) # Change with your own user ID - USER_ID = 123456
 TOKEN = os.getenv("REDDIT_REQUESTS") # Change with your own token - TOKEN = 'your-token'
 PREFIX = '?' # only used for the reload, logout, and sync commands
 ##STOP EDIT
@@ -32,16 +31,16 @@ async def on_ready():
 
 @bot.command(hidden=True)
 async def logout(ctx):
-    ''' Logs the bot out and closes the script
-    '''
-    if ctx.message.author.id == USER_ID:
-        print(f"Logout command {ctx.message.author}.")
-        await ctx.reply("Logging out...")
-        await bot.close()
-    else:
-        await ctx.message.delete()
-        await ctx.author.send("Sorry, but you cannot use the logout command.")
-        print(f'{ctx.author} tried to log the bot out in {ctx.guild}.')
+	''' Logs the bot out and closes the script
+	'''
+	if ctx.author.id == USER_ID:
+		print(f"Logout command {ctx.author}.")
+		await ctx.reply("Logging out...")
+		await bot.close()
+	else:
+		await ctx.message.delete()
+		await ctx.author.send("Sorry, but you cannot use the logout command.")
+		print(f'{ctx.author} ({ctx.author.id}) tried to log the bot out in {ctx.guild}.')
 
 @bot.command(hidden=True)
 @commands.guild_only()
