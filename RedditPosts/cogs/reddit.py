@@ -158,12 +158,12 @@ class SubredditWatch(commands.Cog):
                                             embed = discord.Embed(title=submission.title, url=submission.permalink, timestamp=created_at)
                                             embed.set_image(url=submission.url)
                                             await channel.create_thread(name=submission.title, embed=embed)
-                                            await sleep(1) # Discord rate limits
+                                            await sleep(5) # Discord rate limits
                                     else:
                                         embed = discord.Embed(title=submission.title, url=submission.permalink, timestamp=created_at)
                                         embed.set_image(url=submission.url)
                                         await channel.create_thread(name=submission.title, embed=embed)
-                                        await sleep(1) # Discord rate limits
+                                        await sleep(5) # Discord rate limits
                         elif running['running'] == 0:
                             return
                             
