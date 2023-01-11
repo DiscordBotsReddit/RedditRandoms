@@ -28,13 +28,6 @@ async def on_ready():
 		for filename in os.listdir('./cogs'):
 			if filename.endswith('.py'):
 				await bot.load_extension(f'cogs.{filename[:-3]}')
-	db = sqlite3.connect('watched_subs.db')
-	cur = db.cursor()
-	cur.execute("CREATE TABLE IF NOT EXISTS WatchedSubs(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guild_id INTEGER NOT NULL, subreddit TEXT NOT NULL);")
-	cur.execute("CREATE TABLE IF NOT EXISTS SubChannel(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, guild_id INTEGER NOT NULL UNIQUE, channel_id INTEGER NOT NULL UNIQUE, running INTEGER NOT NULL DEFAULT 0);")
-	db.commit()
-	cur.close()
-	db.close()
 	print('Logged in as', bot.user)
 
 @bot.command(hidden=True)
