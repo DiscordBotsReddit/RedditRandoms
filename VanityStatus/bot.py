@@ -1,19 +1,25 @@
-import discord
-from discord.ext import commands
 import os
 
+import discord
+from discord.ext import commands
+
 ## PLEASE EDIT THESE WITH THE CORRECT VALUES
-PREFIX = '.'
-TOKEN = os.getenv('REDDIT_REQUESTS') # 'your-token-here'
-ROLE_NAME = 'Super Awesome Role for Advertising our Server to your Friends!'
-ADVERTISMENT_PREFIX = '[Custom]'
+PREFIX = "."
+TOKEN = os.getenv("REDDIT_REQUESTS")  # 'your-token-here'
+ROLE_NAME = "Super Awesome Role for Advertising our Server to your Friends!"
+ADVERTISMENT_PREFIX = "[Custom]"
 ## STOP EDITING
 
-intents =  discord.Intents.default()
+intents = discord.Intents.default()
 intents.presences = True
 intents.members = True
 
-bot = commands.Bot(command_prefix=PREFIX, intents=intents, description='Giving a special role for advertising the world\'s greatest graphic design server')
+bot = commands.Bot(
+    command_prefix=PREFIX,
+    intents=intents,
+    description="Giving a special role for advertising the world's greatest graphic design server",
+)
+
 
 @bot.event
 async def on_presence_update(before, after):
@@ -50,9 +56,10 @@ async def on_presence_update(before, after):
         except:
             pass
 
+
 @bot.event
 async def on_ready():
-    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    print(f"Logged in as {bot.user} (ID: {bot.user.id})")
 
 
 bot.run(TOKEN)

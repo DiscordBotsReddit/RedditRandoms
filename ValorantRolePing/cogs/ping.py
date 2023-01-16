@@ -26,13 +26,12 @@ class Valorant(commands.Cog):
                 for i, v in enumerate(keys_list):
                     if v == role.position:
                         ping_set.add(interaction.guild.get_role(guild_roles[keys_list[i]]).mention)
-                        if i == len(keys_list)-1:
-                            for x in range(3,0,-1):
+                        for x in range(1,4):
+                            try:
                                 ping_set.add(interaction.guild.get_role(guild_roles[keys_list[i-x]]).mention)
-                        else:
-                            for x in range(4):
                                 ping_set.add(interaction.guild.get_role(guild_roles[keys_list[i+x]]).mention)
-                                ping_set.add(interaction.guild.get_role(guild_roles[keys_list[i-x]]).mention)
+                            except:
+                                pass
                 ping_set = sorted(ping_set)
                 await interaction.response.send_message(f'{"|".join(ping_set)}: {interaction.user.display_name} is looking for a game!')
                 break

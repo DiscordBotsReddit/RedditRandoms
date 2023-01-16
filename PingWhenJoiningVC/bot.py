@@ -1,23 +1,35 @@
-#https://www.reddit.com/r/Discord_Bots/comments/100yvc9/i_want_to_make_a_discord_mod_that_ping_a_role/
+# https://www.reddit.com/r/Discord_Bots/comments/100yvc9/i_want_to_make_a_discord_mod_that_ping_a_role/
+
+import os
 
 import discord
-import os
 from discord.ext import commands
 
 ## EDIT TO YOUR VALUES
-PREFIX = "." # Prefix for the init and help commands
-TOKEN = os.getenv("REDDIT_REQUESTS") # REPLACE WITH YOUR TOKEN
-TEXT_CHANNEL_TO_PING = 'testing'
-VOICE_CHANNEL_TO_WATCH = 'watch this one'
-ROLE_TO_WATCH = 'Tester'
+PREFIX = "."  # Prefix for the init and help commands
+TOKEN = os.getenv("REDDIT_REQUESTS")  # REPLACE WITH YOUR TOKEN
+TEXT_CHANNEL_TO_PING = "testing"
+VOICE_CHANNEL_TO_WATCH = "watch this one"
+ROLE_TO_WATCH = "Tester"
 ## DON'T EDIT BELOW
 
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
-activity = discord.Activity(name=f'{PREFIX}help', type=discord.ActivityType.playing)
-bot = commands.Bot(command_prefix=PREFIX, intents=intents, description="VCMonitor - Sends a message in text chat when a user joins a VC", activity=activity)
+activity = discord.Activity(name=f"{PREFIX}help", type=discord.ActivityType.playing)
+bot = commands.Bot(
+    command_prefix=PREFIX,
+    intents=intents,
+    description="VCMonitor - Sends a message in text chat when a user joins a VC",
+    activity=activity,
+)
+
+
+@bot.event
+async def on_ready():
+    print("Logged in as", bot.user)
+
 
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -28,7 +40,10 @@ async def on_voice_state_update(member, before, after):
             if role.name.lower() == ROLE_TO_WATCH.lower():
                 for channel in member.guild.text_channels:
                     if channel.name.lower() == TEXT_CHANNEL_TO_PING.lower():
-                        await channel.send(f'{member.display_name} has joined the `{after.channel}` voice chat.')
+                        await channel.send(
+                            f"{member.display_name} has joined the `{after.channel}` voice chat."
+                        )
+                        break
 
 
 bot.run(TOKEN)
