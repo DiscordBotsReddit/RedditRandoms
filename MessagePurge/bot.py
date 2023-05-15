@@ -13,9 +13,7 @@ from humanfriendly import parse_timespan
 
 ## EDIT THESE WITH YOUR VAULES
 PREFIX = "?purge "
-TOKEN = os.getenv(
-    "REDDIT_REQUESTS"
-)  # Replace with your token or put the token in environment variables
+TOKEN = "BOT TOKEN"  # Replace with your token or put the token in environment variables
 DEFULT_MESSAGE_AGE = "5 minutes"  # Default message age to purge
 HOW_OFTEN_PURGE_RUNS = "20 minutes"
 ##
