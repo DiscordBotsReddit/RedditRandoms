@@ -53,7 +53,7 @@ async def on_ready():
     print(f"Logged in as {bot.user}")
 
 
-@bot.command(name="remove")
+@bot.command(name="remove", aliases=["dontpurge"])
 @commands.has_permissions(manage_guild=True)
 async def no_purge(ctx):
     """Adds the channel the command was sent in to the no-purge list"""
@@ -74,7 +74,7 @@ async def no_purge(ctx):
     )
 
 
-@bot.command(name="add")
+@bot.command(name="add", aliases=["purge"])
 @commands.has_permissions(manage_guild=True)
 async def purge(ctx):
     """Removes the channel the command was sent in from the no-purge list"""
